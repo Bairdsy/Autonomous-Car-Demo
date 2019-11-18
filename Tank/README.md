@@ -56,4 +56,4 @@ The STL files for the 3D models of the tank are available in this folder of the 
  - Pi Zero Tank Guns.stl : The 3 front guns (removes for easy access to camera)
 
 My version was printed on a Wanhao Duplicator i3 Plus in green PLA with 0.1mm layer height.
-  ![3d Models](../Images/Tank_Models.png?raw=true)
+  ![3d Models](../Images/Tank_Model.png?raw=true)
