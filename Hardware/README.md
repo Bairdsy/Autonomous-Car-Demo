@@ -7,7 +7,10 @@
 | 1 | Explorer Phat (https://shop.pimoroni.com/products/explorer-phat) | $17.00 |
 | 1 | Pololu Zumo Chassis Kit (https://shop.pimoroni.com/products/zumo-chassis-kit-no-motors) | $31.00 |
 | 2 | Micro Metal Gearmotor (https://shop.pimoroni.com/products/micro-metal-gearmotor-extended-back-shaft) – 50:1 or 298:1 (will impact speed) | 2 x $8.00 = $16.00 |
-| 1 | 3D printed Tank Body (.STL 3D model included in appendix)	| $10 (for filament) |
+| 1 | 3D printed Inner Car Body (.STL 3D model included in GitHub)	| $10 (for filament) |
+| 1 | 3D printed Outer Car Shell - Ambulance (.STL 3D model included in GitHub)	| $10 (for filament) |
+| 1 | 3D printed Outer Car Shell - Mining Truck (.STL 3D model included in GitHub)	| $10 (for filament) |
+| 1 | 3D printed Outer Car Shell - Van (.STL 3D model included in GitHub)	| $10 (for filament) |
 | 1 | Power bank or battery pack capable of USB 5V 2A output – as small as possible | $20 |
 | 1 | 16GB Micro SD Card | $10 |
 | 1 | Sharp GP2Y0A21YK0F Reflective Sensor (https://au.rs-online.com/web/p/reflective-optical-sensors/6666564/) | $17 |
@@ -15,15 +18,16 @@
 | 1 | Pkt Male to Male Jumper Jerky (https://shop.pimoroni.com/products/jumper-jerky-junior?variant=1076482173) | $4 |
 | 1 | Camera module for Raspberry Pi Zero (https://shop.pimoroni.com/products/raspberry-pi-zero-camera-module) | $12 |
 
-Estimated total cost:  $162
+Estimated total cost:  $182
 
 ### For the Enclosure
 | Number | Item | Indicative Cost |
 | --- | --- | --- |
 | 2 | 900 x 1200 x 5mm Ply-Wood boards (white) | 2 x $11 |
 | 8 | 3D printed corner brackets | $5 (for filament) |	
+| 4 | Programmable RGB LEDs | 4 x $5 |	
 		
-Estimated total cost:  $27.00
+Estimated total cost:  $47.00
 
 ## Instructions:
 ### Zumo Chassis Construction
@@ -49,11 +53,17 @@ Estimated total cost:  $27.00
 8.	In each of the two front tabs and your choice of the interior-nut holes along the rear, insert a  machine screw through the mounting plate and chassis and tighten it against a nut inside the chassis. You can line up the nut by feel, or you could try temporarily taping the nuts inside the recesses in the chassis.
 9.	Add the silicone tracks by stretching them around the sprockets on each side of the chassis.
 
-### The Tank Frame
-The STL files for the 3D models of the tank are available in this folder of the repository.  There are 3 models:
- - Pi Zero Tank.stl  :  The main body of the tank
- - Pi Zero Tank Turret.stl : The Circular top turret and main gun (removes for easy access)
- - Pi Zero Tank Guns.stl : The 3 front guns (removes for easy access to camera)
+### The Car Bodies
+The STL files for the 3D models are available in this folder of the repository.  
+ - Box Chassis.stl  :  The inner compartment of the car which houses the electronics
+ - Box Chassis - Lid.stl : The lid to the inner compartment
+ - Ambulance Vehicle Skin.stl : The Ambulance skin
+ - Van shell.stl : The Delivery Van skin
+ - Mining Truck Skin.stl : The Mining Truck skin 
 
-My version was printed on a Wanhao Duplicator i3 Plus in green PLA with 0.1mm layer height.
-  ![3d Models](../Images/Tank_Model.png?raw=true)
+The original demo versions were printed on a Wanhao Duplicator i3 Plus in PLA with 0.14mm layer height.
+  ![InnerShell](../Images/Inner_Body.png?raw=true)
+  ![MiningTruck](../Images/Mining_Truck_Shell.png?raw=true)
+  ![VanShell](../Images/Van_Shell.png?raw=true)
+  ![AmbulanceShell](../Images/Ambulance_Shell.png?raw=true)
+  
