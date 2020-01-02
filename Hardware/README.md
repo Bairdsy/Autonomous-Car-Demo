@@ -1,6 +1,6 @@
 # Hardware:
 ## Bill of Materials:
-### For the Tank
+### For the Vehicle
 | Number | Item | Indicative Cost |
 | --- | --- | --- |
 | 1 | Raspberry Pi Zero W (https://shop.pimoroni.com/products/raspberry-pi-zero-wh-with-pre-soldered-header) | $20.00 |
@@ -20,14 +20,24 @@
 
 Estimated total cost:  $182
 
+### For the Control Board, Monitor, Sensors & LEDs
+| Number | Item | Indicative Cost |
+| --- | --- | --- |
+| 1 | Raspberry Pi 4 1GB (https://shop.pimoroni.com/products/raspberry-pi-4?variant=29157087379539) | $54 |
+| 4 | Programmable RGB LEDs | 4 x $5 |	
+| 1 | Explorer Hat Pro (https://shop.pimoroni.com/products/explorer-hat) | $31 |
+| 4 | Force Sensing Resistor (https://core-electronics.com.au/search/?q=pololu-1645) | 4 x $14 |
+| 1 | 7 inch monitor (or similar) | unknown |
+		
+Estimated total cost:  $157.00
+
 ### For the Enclosure
 | Number | Item | Indicative Cost |
 | --- | --- | --- |
 | 2 | 900 x 1200 x 5mm Ply-Wood boards (white) | 2 x $11 |
 | 8 | 3D printed corner brackets | $5 (for filament) |	
-| 4 | Programmable RGB LEDs | 4 x $5 |	
 		
-Estimated total cost:  $47.00
+Estimated total cost:  $62.00
 
 ## Instructions:
 ### Zumo Chassis Construction
