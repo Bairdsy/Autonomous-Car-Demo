@@ -40,6 +40,14 @@ Estimated total cost:  $157.00
 Estimated total cost:  $62.00
 
 ## Instructions:
+
+### The Corner Brackets
+The enclosure is held together by 3d printed corner brackets.  The STL model for these brackets is:
+ - Double Bracket.stl
+
+The original demo versions were printed on a Wanhao Duplicator i3 Plus in PLA with 0.14mm layer height.
+  ![Brackets](../Images/Bracket.png?raw=true)
+
 ### Zumo Chassis Construction
 1.	Check you have all components: 
   -	Zumo chassis main body
