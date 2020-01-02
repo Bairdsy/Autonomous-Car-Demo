@@ -1,0 +1,117 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$script = <<SCRIPT
+if ! type -p pip;  then
+   # install pip
+   curl -s https://bootstrap.pypa.io/get-pip.py | sudo python
+fi
+
+if ! type -p ansible;  then
+   # install Ansible
+   pip install 'ansible==2.7.10'
+fi
+
+tee "/etc/profile.d/ansible-env.sh" > "/dev/null" <<EOF
+# Ansible environment variables.
+sudo mkdir -p /var/log/sas/install
+sudo chown vagrant /var/log/sas/install
+export ANSIBLE_ROLES_PATH="/vagrant/playbooks/sas_viya_playbook:/vagrant/playbooks/sas_viya_playbook/roles:/vagrant/playbooks/sas_viya_playbook/internal"
+export ANSIBLE_LOG_PATH=/var/log/sas/install/deployment.log
+EOF
+SCRIPT
+
+VAGRANTFILE_API_VERSION = "2"
+NODE_COUNT = 4
+NODE_BASE_NAME = "esp19w25"
+DISK_SIZE_GB=80 #in GB
+DISK_LOCATION="/vagrant/virtualbox/disks"
+DISK_FORMAT="vmdk"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vbguest.auto_update = true
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.vm.box_url = "file:///vagrant/box/CentOS-7-x86_64-Vagrant-1902_01.VirtualBox.box"
+  config.vm.box = "centos/7"
+
+
+  config.vm.define 'espnode' do |machine|
+    node_name = "espserver"
+    file_to_disk = "#{DISK_LOCATION}/#{node_name}.vmdk"
+    machine.vm.network "private_network", ip: "192.168.56.201"
+    machine.vm.hostname = "#{node_name}.#{NODE_BASE_NAME}.local"
+    machine.hostmanager.aliases = "#{node_name}.#{NODE_BASE_NAME}.local #{node_name}"
+
+    #shared filesystem
+    machine.vm.synced_folder "/vagrant/esp_19w25/git", "/shared/", type: "virtualbox"
+
+    machine.vm.synced_folder "/vagrant/esp_19w25/github/espdeploy", "/app2", type: "virtualbox"
+
+    machine.vm.provider "virtualbox" do |v|
+        v.name = "esp server 19w25"
+        v.memory = 4096
+        v.cpus = 4
+
+        if (ARGV[0] == "up" && ! File.exist?("#{DISK_LOCATION}/#{node_name}.#{DISK_FORMAT}"))
+          FILE_TO_DISK = "#{DISK_LOCATION}/#{node_name}.vmdk"
+          v.customize ['createhd', '--filename', "#{FILE_TO_DISK}", '--size', DISK_SIZE_GB * 1024 ]
+          # Adding a SATA controller that allows 2 hard drives
+          v.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--portcount', 2]
+          # Attaching the disks using the SATA controller
+          v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "#{FILE_TO_DISK}"]
+        end #End of File exist
+    end # vm.provider
+
+    #pre-req packages
+    machine.vm.provision "shell", inline: $script
+
+    #COPY ansible files
+    machine.vm.provision "file", source: "/vagrant/esp_19w25/data/configuration/ansible.cfg", destination: "/vagrant/ansible.cfg"
+    machine.vm.provision "file", source: "/vagrant/esp_19w25/data/playbooks/pre-deployment.yml", destination: "/vagrant/playbooks/pre-deployment.yml"
+
+    #COPY viya ark and install playbook
+
+    machine.vm.provision "file", source: "/vagrant/esp_19w25/data/playbooks", destination: "/vagrant/playbooks"
+    machine.vm.provision "file", source: "/vagrant/esp_19w25/data/configuration/inventory_external.ini", destination: "/vagrant/playbooks/sas_viya_playbook/inventory.ini"
+
+
+    #run pre-deployment.yml playbook
+    machine.vm.provision "host-setup", type: "ansible_local"  do |ansible|
+      ansible.playbook       = "playbooks/pre-deployment.yml"
+      ansible.verbose        = true
+      ansible.limit          = "sas-all" # or only "nodes" group, etc.
+      ansible.inventory_path = "/vagrant/playbooks/sas_viya_playbook/inventory.ini"
+    end
+
+
+
+    #run viya-ark
+    machine.vm.provision "sas-viya-ark", type: "ansible_local"  do |ansible|
+      ansible.playbook       = "playbooks/sas_viya_playbook/viya-ark/playbooks/pre-install-playbook/viya_pre_install_playbook.yml"
+      ansible.verbose        = true
+      #ansible.limit          = "sas-all" # or only "nodes" group, etc.
+      ansible.inventory_path = "/vagrant/playbooks/sas_viya_playbook/inventory.ini"
+      ansible.raw_arguments  = ['-e', 'use_pause=false']
+      ansible.skip_tags      = "skipmemfail,skipcoresfail,skipstoragefail,skipnicssfail,bandwidth,nicetohave"
+    end
+
+    #run main install
+    #provision path is required to use ansible.cfg from playbook instead of custom cfg
+    #add host_key_checking = no tp ansible.cfg file
+    machine.vm.provision "sas-viya-install", type: "ansible_local"  do |ansible|
+      ansible.playbook       = "/vagrant/playbooks/sas_viya_playbook/site.yml"
+      ansible.provisioning_path = "/vagrant/playbooks/sas_viya_playbook"
+      #ansible.limit          = "sas-all" # or only "nodes" group, etc.
+      ansible.raw_arguments  = ['-vvvv']
+      #sudo systemctl disable sas-viya-all-services
+    end
+
+  end
+end
+
+#yum install libXcomposite libXcursor libXi libXtst libXrandr alsa-lib mesa-libEGL libXdamage mesa-libGL libXScrnSaver

@@ -1,0 +1,10 @@
+input-map:
+  _image_: string
+output-map:
+  P__label_Apple: double (Predicted: _label_=Apple       )
+  P__label_Coffee_Cup: double (Predicted: _label_=Coffee_Cup  )
+  P__label_Orange: double (Predicted: _label_=Orange      )
+  P__label_Plant: double (Predicted: _label_=Plant       )
+  P__label_Shoe_Tape: double (Predicted: _label_=Shoe_Tape   )
+  P__label_Water_Bottle: double (Predicted: _label_=Water_Bottle)
+  I__label_: string (Into: _label_)

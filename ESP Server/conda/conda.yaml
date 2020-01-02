@@ -1,0 +1,19 @@
+name: iotdemo
+
+channels:
+  - conda-forge
+  - anaconda
+  - sas-institute
+
+dependencies:
+  - python=3.7
+  - pandas
+  - pillow
+  - requests
+  - websocket-client
+  - ws4py
+  - graphviz
+  - libtiff
+  - pip
+  - plotly
+  - matplotlib
