@@ -5,7 +5,11 @@ import explorerhat
 import numpy as np
 import cv2
 import glob
+import socket
 
+def get_instruction(skt):
+    data = skt.recv(1024)
+    return data
 
 def getch():
     fd = sys.stdin.fileno()
@@ -45,10 +49,19 @@ def convert_to_HSV(img):
 
 button_delay = 0.4
 speed = 30
+HOST = '127.0.0.1'  # The server's hostname or IP address
+PORT = 65432        # The port used by the server
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect((HOST, PORT))
+
+print('Connected to ESP Server communications socket')
+
 
 while True:
     print("Vehicle is ready for input:")
-    char = getch()
+    #char = getch()
+    char = get_instruction(s)
  
     if (char == "p"):
         print("Exit!")
